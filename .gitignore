@@ -1,0 +1,5 @@
+
+*.pdb
+Library/
+ProjectSettings/
+obj/
