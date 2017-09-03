@@ -2,7 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Weapon : MonoBehaviour
+/******************************************************************************
+* Weapon */
+/** 
+* Base class for all weapons such as Rockets and Bombs.
+******************************************************************************/
+public abstract class Weapon : Thing
   {
   protected float   mAngle;
   protected Vector3 mScreenPoint;
@@ -61,29 +66,33 @@ public class Weapon : MonoBehaviour
   virtual public void playExplosionAnim()
     {
     }
-
-  /** Randomly sets a Building as a target for the weapon as long as the Building is alive. */
-  public Vector3 findTargetBuilding()
+  
+  /****************************************************************************
+  * findTargetBuilding */ 
+  /**
+  * Randomly sets a Building as a target for the weapon as long as the
+  * Building is alive.
+  ****************************************************************************/
+  public Vector3 findTargetBuilding() { return findTargetBuilding(minY); }
+  /**
+  * Randomly sets a Building as a target for the weapon as long as the
+  * Building is alive. Will try to reach lowest passed in Y value.
+  * 
+  * @param  targetY  Lowest Y destination point.
+  ****************************************************************************/
+  public Vector3 findTargetBuilding(float targetY)
     {
     /** Launcher list and City list to use for targets. */
     List<Building> buildings = new List<Building>();
     buildings.AddRange(Resources.FindObjectsOfTypeAll<Launcher>());
     buildings.AddRange(Resources.FindObjectsOfTypeAll<City>());
 
-    /** Find least and largets indeces. */
+    int maxIndex    = buildings.Count;
     int minIndex    = 0;
-    int maxIndex    = buildings.Count-1;
-    int targetIndex = 0;
+    int targetIndex = Random.Range(minIndex, maxIndex);
+    Vector3 target = new Vector3(buildings[targetIndex].transform.position.x, targetY, z);
 
-    /** Find a non-dead building to target. */
-    for(int i = 0; i < maxIndex - 1; i++)
-      {
-      targetIndex = Random.Range(minIndex, maxIndex);
-      if (!buildings[targetIndex].dead)
-        break;
-      }
-    
-    return buildings[targetIndex].transform.position;
+    return target;//buildings[targetIndex].transform.position;
     }
 
   /****************************************************************************
@@ -93,7 +102,7 @@ public class Weapon : MonoBehaviour
   ****************************************************************************/
   virtual public void tryDestroy()
     {
-    if (checkAnimDone ())
+    if (checkAnimDone())
       Destroy (gameObject);
     }
 
@@ -112,6 +121,7 @@ public class Weapon : MonoBehaviour
   /****************************************************************************
   * stopAudioSource */ 
   /**
+  * Stops the Weapon's audio source.
   ****************************************************************************/
   public void stopAudioSource()
     {

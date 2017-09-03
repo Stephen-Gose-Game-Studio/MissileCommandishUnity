@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* Bomb */
+/** 
+* A bomb that drops on targets and is created by the BlueBomber.
+******************************************************************************/
 public class Bomb : Weapon
   {
   public AudioClip bombExplosion;
@@ -10,6 +15,7 @@ public class Bomb : Weapon
   ****************************************************************************/
   public override void Start ()
     {
+
     setWeaponSpeed((float)Random.Range(6, 10));
 	  }
 	

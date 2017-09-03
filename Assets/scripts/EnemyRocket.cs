@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* EnemyRocket */
+/** 
+* Represents Rockets that are launched by the enemy.
+******************************************************************************/
 public class EnemyRocket : Rocket
   {
-
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
@@ -56,16 +60,15 @@ public class EnemyRocket : Rocket
   * Methods 
   ****************************************************************************/
   /****************************************************************************
-  * targetRandomPoint */ 
+  * targetBuilding */ 
   /**
-  * Targets random point.
+  * Targets a building on the screen.
   ****************************************************************************/
-  public void targetRandomPoint()
+  public void targetBuilding()
     {
-    Vector3 targetPosition = new Vector3(Random.Range(minX, maxX), minY, z);
+    //Vector3 targetPosition = new Vector3(Random.Range(minX, maxX), minY, z);
 
-    setTarget (targetPosition);
-    //mTarget = findTargetBuilding();
+    mTarget = findTargetBuilding();
 
     mScreenPoint           = transform.localPosition;
     mOffset                = new Vector2(mTarget.x - mScreenPoint.x, mTarget.y - mScreenPoint.y);
@@ -82,7 +85,7 @@ public class EnemyRocket : Rocket
     {
     /** Find random position, and set as target. */
     transform.position = new Vector3(Random.Range(minX, maxX), maxY, z);
-    targetRandomPoint();
+    targetBuilding();
     }
 
   /****************************************************************************
@@ -99,7 +102,7 @@ public class EnemyRocket : Rocket
       setWeaponSpeed(newSpeed);
     
     transform.position = launchFrom;
-    targetRandomPoint();
+    targetBuilding();
     }
 
   /****************************************************************************

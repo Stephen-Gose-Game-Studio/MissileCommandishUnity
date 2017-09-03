@@ -2,6 +2,17 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+/**
+TODOs 
+[]After certain score met, add building back.
+[]Ad support.
+[]Change scenery as game progresses.
+[]Score multipliers.
+[]Show score on game over.
+[]Clouds.
+[]Config file?
+**/
 /****************************************************************************
 * DEV NOTES
 *   Animators: The way I handle animations is probably odd from the way they
@@ -10,6 +21,11 @@ using UnityEngine.SceneManagement;
 * so its transition will be ignored(hack?). 'Done' is checked for in order
 * to discern that the object should be destroyed.
 ****************************************************************************/
+/******************************************************************************
+* MainGame */
+/** 
+* Where the magic happens.
+******************************************************************************/
 public class MainGame : MonoBehaviour
   {
   GameObject   canvasGame;
@@ -17,7 +33,7 @@ public class MainGame : MonoBehaviour
   GameObject   canvasWaveCleared;
   Vector3      camOriginalPosition;
 
-  float gameOverTransitionTimer = 1.5f;
+  float transitionTimer = 1.5f;
 
   int   enemyBlueBomberClonesInPlayCount{ get { return Resources.FindObjectsOfTypeAll<BlueBomber>().Length; } }
   bool  enemyBlueBombersClonesInPlay    { get { return enemyBlueBomberClonesInPlayCount > 1; } }
@@ -38,6 +54,7 @@ public class MainGame : MonoBehaviour
   public static Player player;
 
   protected     float  mTimer;
+  protected     bool   mWinBonusApplied;
 
   public        City     city1;
   public        City     city2;
@@ -61,6 +78,8 @@ public class MainGame : MonoBehaviour
   protected static long  mCurrentWave;
   protected static float mShakeCounter;
 
+  public void incrementTimer() { mTimer += Time.deltaTime; }
+
   public static int    buildingFiresLayer  { get { return 15; } }
   public static string buildingFireTag     { get { return "BuildingFire";  } }
   public static long   currentWave         { get { return mCurrentWave; } }
@@ -74,7 +93,7 @@ public class MainGame : MonoBehaviour
     mShakeCounter -= Time.deltaTime;
     mShakeCounter = mShakeCounter < 0.0f ? 0.0f : mShakeCounter;
     }
-
+  
   public static void incrementCurrentWave() { mCurrentWave++; }
 
   /****************************************************************************
@@ -167,8 +186,8 @@ public class MainGame : MonoBehaviour
     player.enabled = true;
 
     incrementCurrentWave();
-    enemy .setRocketCount((long)(currentWave * .5 + 1) + 15);
-    player.setRocketCount((long)(currentWave * .5) + 30);
+    enemy .setRocketCount((long)(currentWave * 1.0f) + 10);
+    player.setRocketCount((long)(currentWave * 0.75f) + 30);
     }
 
   /****************************************************************************
@@ -241,6 +260,9 @@ public class MainGame : MonoBehaviour
   ****************************************************************************/
   public void handleWin()
     {
+    /** Reset timer. */
+    mTimer = 0;
+
     /** Show the win screen. */
     canvasWaveCleared.SetActive(true);
 
@@ -254,12 +276,22 @@ public class MainGame : MonoBehaviour
     enemy.enabled  = false;
     player.enabled = false;
 
+    long launcherBonus = player.launcherCount()    * 500;
+    long cityBonus     = player.cityCount()        * 250;
+    long missileBonus  = player.currentRocketCount * 20;
+
+    if(!mWinBonusApplied)
+      {
+      player.playerScore = player.playerScore + launcherBonus + cityBonus + missileBonus;
+      mWinBonusApplied = true;
+      }
+
     /** Update the counts and score for the Wave Cleared screen. */
     GameObject.Find("txtWaveCleared")  .GetComponent<Text>().text = "Wave "   + mCurrentWave + " Cleared";
     GameObject.Find("txtCurrentScore") .GetComponent<Text>().text = "SCORE\n" + player.playerScore;
-    GameObject.Find("txtLauncherCount").GetComponent<Text>().text = player.launcherCount().ToString();
-    GameObject.Find("txtCityCount")    .GetComponent<Text>().text = player.cityCount().ToString();
-    GameObject.Find("txtAmmoCount")    .GetComponent<Text>().text = player.currentRocketCount.ToString();
+    GameObject.Find("txtLauncherCount").GetComponent<Text>().text = player.launcherCount().ToString()    + " x 500 = " + launcherBonus.ToString();
+    GameObject.Find("txtCityCount")    .GetComponent<Text>().text = player.cityCount().ToString()        + " x 250 = " + cityBonus.ToString();
+    GameObject.Find("txtAmmoCount")    .GetComponent<Text>().text = player.currentRocketCount.ToString() + " x 20 = " + missileBonus.ToString();
     }
 
   /****************************************************************************
@@ -315,7 +347,10 @@ public class MainGame : MonoBehaviour
     /** Win. */
     if(checkWin())
       {
-      handleWin();
+      /** Using a delay so the transition does not seem as abrupt. */
+      incrementTimer();
+      if(mTimer >= transitionTimer)
+        handleWin();
       }
 
     /** Check that Player lost. */
@@ -323,11 +358,18 @@ public class MainGame : MonoBehaviour
       {
       if(!enemyRocketClonesInPlay)
         {
-        /** Using a delay so the game over transition does not seem as abrupt. */
-        mTimer += Time.deltaTime;
-        if(mTimer >= gameOverTransitionTimer)
+        /** Using a delay so the transition does not seem as abrupt. */
+        incrementTimer();
+        if(mTimer >= transitionTimer)
           loadGameOverMenu();
         }
+      }
+    
+    /** Do other things. */
+    else
+      {
+      /** Reset the win bonus between win screens. */
+      mWinBonusApplied = false;
       }
     }
   }

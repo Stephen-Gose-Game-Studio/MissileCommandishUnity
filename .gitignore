@@ -3,3 +3,14 @@
 Library/
 ProjectSettings/
 obj/
+*.sln
+
+*.userprefs
+
+*.dll
+
+*.mdb
+
+*.backup
+
+Temp/

@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rocket : Weapon
+/******************************************************************************
+* Rocket */
+/** 
+* Base class for Rocket weapons.
+******************************************************************************/
+public abstract class Rocket : Weapon
   {
   public    ParticleSystem rocketFirePS;
   public    ParticleSystem rocketExplostionPS;

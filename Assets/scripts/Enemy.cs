@@ -2,7 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Enemy : MonoBehaviour
+/******************************************************************************
+* Enemy */
+/** 
+* Responsible for generating an maintaining all weapons that oppose the player.
+******************************************************************************/
+public class Enemy : Thing
   {
 
   /** Object for enemy missile. */                   public    GameObject enemyRocket;
@@ -39,13 +44,14 @@ public class Enemy : MonoBehaviour
       {
       /** Randomly launch a Blue Bomber or MIRV; otherwise launch regular missile. */
       int roll = (int)Random.Range(0f, 16.0f);
+
       /** Launch BlueBomber. */
       if (roll == 1)
         {
         Instantiate(blueBomber);
         }
       /** Launch MIRV. */
-      else if (roll == 15 || Input.GetKeyDown(KeyCode.G))
+      else if (roll == 15)
         {
         GameObject merv = Instantiate(mirv);
         merv.GetComponent<MIRV>().launchFromRandomPoint();

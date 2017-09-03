@@ -6,13 +6,19 @@ using System.Collections;
 /**
 * Base class for Cities and Launchers.
 ****************************************************************************/
-public class Building : MonoBehaviour
+public class Building : Thing
   {
-  public bool dead = false;
+  public bool   dead;
+  public string bldgName;
 
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
+  public virtual void Start()
+    {
+    dead = false;
+    }
+  
   public virtual void Update()
     {
     if (dead)
@@ -64,8 +70,8 @@ public class Building : MonoBehaviour
   ****************************************************************************/
   public void tryDestroy()
     {
-    if (checkAnimDone ())
-      Destroy (gameObject);
+//    if (checkAnimDone ())
+    Destroy (gameObject);
     } 
   }
 

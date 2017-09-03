@@ -3,7 +3,13 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class GameOverScene : MonoBehaviour
+/******************************************************************************
+* GameOverScene */
+/** 
+* Scene consisting of a basic background and some text denoting player lost.
+* Allows for restarting the game.
+******************************************************************************/
+public class GameOverScene : Thing
   {
   public Button btnRestart;
   public int    mainGameSceneIndex = -1;

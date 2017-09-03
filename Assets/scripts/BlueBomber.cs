@@ -1,14 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* BlueBomber */
+/** 
+* A Blue Bomber that flies across the top of the screen, and drops bombs on
+* targets.
+******************************************************************************/
 public class BlueBomber : Weapon
   {
   public GameObject daBomb;
   public AudioClip  bombDrop;
   public AudioClip  bomberExplosion;
-  Vector3           bombTarget;
-  int               bombCount;
 
+  protected Vector3 mBombTarget;
+  protected int     mBombCount;
+  //TODO CH  BOMB DROP Y IS FUCKED UP.
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
@@ -23,10 +30,9 @@ public class BlueBomber : Weapon
     /** Set target for bomber to fly to. */
     mTarget = new Vector3(maxX,transform.position.y,z);
 
-    /** Set target for bomb to drop on. */
-    bombTarget = findTargetBuilding();
-    bombCount  = 1;
-
+    /** Set target for bomb to drop on. We want a really low target Y. */
+    mBombTarget = findTargetBuilding(-51);
+    mBombCount  = 1;
     }
 
   public override void Update()
@@ -77,17 +83,17 @@ public class BlueBomber : Weapon
   public void dropBomb()
     {
     /** Update if the enemy class is enabled (game not paused). */
-    if(!dead && bombCount > 0 && (transform.position.x <= bombTarget.x + 1 && transform.position.x >= bombTarget.x - 1))
+    if(!dead && mBombCount > 0 && (transform.position.x <= mBombTarget.x + 1 && transform.position.x >= mBombTarget.x - 1))
       {
       GetComponent<AudioSource>().clip    = bombDrop;
       GetComponent<AudioSource>().enabled = true;
       GetComponent<AudioSource>().Play();
 
-      bombCount--;
+      mBombCount--;
 
       GameObject bomb         = Instantiate(daBomb);
       bomb.transform.position = transform.position;
-      bomb.GetComponent<Bomb>().setTarget(bombTarget);
+      bomb.GetComponent<Bomb>().setTarget(mBombTarget);
       }
     }
   
@@ -111,7 +117,7 @@ public class BlueBomber : Weapon
     }
 
   /****************************************************************************
-  * override playExplosionAnim */ 
+  * playExplosionAnim */ 
   /**
   * Plays the Explosion Animation. Sets the layer to the EnemyExplosion layer.
   * and Tag.

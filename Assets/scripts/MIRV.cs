@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* MIRV */
+/** 
+* A missile that has the ability to launch several other missiles from its
+* current posistion at a random point in time.
+******************************************************************************/
 public class MIRV : Rocket
   {
   public GameObject rocket1;

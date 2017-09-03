@@ -2,6 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/******************************************************************************
+* Player */
+/** 
+* Tracks player stats like current missile count, and score. Also manages
+* PlayerRocket launch.
+******************************************************************************/
 public class Player : MonoBehaviour
   {
   /** Player's missile count. */           protected long       mCurrentPlayerRocketCount;

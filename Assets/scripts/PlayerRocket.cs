@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* PlayerRocket */
+/** 
+* Rockets that Players launch from launchers.
+******************************************************************************/
 public class PlayerRocket : Rocket
   {
   protected Vector3 mMouse;
@@ -42,6 +47,7 @@ public class PlayerRocket : Rocket
       {
       playExplosionAnim();
       }
+    print("Player rocket colliding");
     }
 
   /****************************************************************************

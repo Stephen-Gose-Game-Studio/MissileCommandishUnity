@@ -3,6 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/******************************************************************************
+* MainMenu */
+/** 
+* Scene consisting of a basic background, title text, credit text, and a
+* button allowing for the player to start a new game.
+******************************************************************************/
 public class MainMenu : MonoBehaviour
   {
   public Button newGameButton;

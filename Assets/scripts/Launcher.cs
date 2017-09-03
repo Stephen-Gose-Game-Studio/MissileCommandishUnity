@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/******************************************************************************
+* Launcher */
+/** 
+* Building that PlayerRockets launch from. If not usable, PlayerRockets cannot
+* launch from it.
+******************************************************************************/
 public class Launcher : Building
   {
 
@@ -9,8 +15,9 @@ public class Launcher : Building
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
-	void Start ()
+  public override void Start ()
     {
+    base.Start();
     isUsable = true;
 	  }
 
