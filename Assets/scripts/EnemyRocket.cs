@@ -11,6 +11,10 @@ public class EnemyRocket : Rocket
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
   public override void Start()
     {
     base.Start();
@@ -18,6 +22,10 @@ public class EnemyRocket : Rocket
     setWeaponSpeed((float)Random.Range(10, 20));
     }
 
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   public override void Update ()
     {
     base.Update();
@@ -25,18 +33,26 @@ public class EnemyRocket : Rocket
     tryDestroy();
     }
 
+  /****************************************************************************
+  * OnCollisionEnter2D */ 
+  /**
+  ****************************************************************************/
   void OnCollisionEnter2D(Collision2D coll)
     {
     /** Increase playerScore. */
     if (!dead)
       {
       /** Increase player score when hit by player's Rocket. **/
-      if (coll.gameObject.tag == "PlayerRocket")
-        MainGame.player.playerScore += directHitValue;
+      if(coll.gameObject.tag == "PlayerRocket")
+        {
+        MainGame.incrementPlayerScore(directHitValue);
+        }
      
       /** Increase player score when hit by player's Explosion. **/
-      else if (coll.gameObject.tag == "PlayerExplosion")
-        MainGame.player.playerScore += proximityHitValue;
+      else if(coll.gameObject.tag == "PlayerExplosion")
+        {
+        MainGame.incrementPlayerScore(proximityHitValue);
+        }
       
       /** Hit the ground. */
       else if (coll.gameObject.tag == "Ground")
@@ -46,12 +62,16 @@ public class EnemyRocket : Rocket
       }
     }
 
+  /****************************************************************************
+  * OnParticleCollision */ 
+  /**
+  ****************************************************************************/
   void OnParticleCollision(GameObject other)
     {
     /** Increase player score when hit by player's Explosion. **/
     if (!dead)
       {
-      MainGame.player.playerScore += particleHitValue;
+      MainGame.incrementPlayerScore(particleHitValue);
       playExplosionAnim();
       }
     }
@@ -127,7 +147,7 @@ public class EnemyRocket : Rocket
     }
 
   /****************************************************************************
-  * override playExplosionAnim */ 
+  * playExplosionAnim */ 
   /**
   * Plays the Explosion Animation. Sets the layer to the EnemyExplosion layer.
   * and Tag.

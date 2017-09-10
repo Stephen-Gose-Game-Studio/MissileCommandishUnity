@@ -28,58 +28,50 @@ TODOs
 ******************************************************************************/
 public class MainGame : MonoBehaviour
   {
-  GameObject   canvasGame;
-  GameObject   canvasPause;
-  GameObject   canvasWaveCleared;
-  Vector3      camOriginalPosition;
-
-  float transitionTimer = 1.5f;
-
-  int   enemyBlueBomberClonesInPlayCount{ get { return Resources.FindObjectsOfTypeAll<BlueBomber>().Length; } }
-  bool  enemyBlueBombersClonesInPlay    { get { return enemyBlueBomberClonesInPlayCount > 1; } }
-
-  int   enemyBombClonesInPlayCount      { get { return Resources.FindObjectsOfTypeAll<Bomb>().Length; } }
-  bool  enemyBombClonesInPlay           { get { return enemyBombClonesInPlayCount > 1; } }
-
-  int   enemyMIRVClonesInPlayCount      { get { return Resources.FindObjectsOfTypeAll<MIRV>().Length; } }
-  bool  enemyMIRVClonesInPlay           { get { return enemyMIRVClonesInPlayCount > 1; } }
-
-  int   enemyRocketClonesInPlayCount    { get { return Resources.FindObjectsOfTypeAll<EnemyRocket>().Length; } }
-  bool  enemyRocketClonesInPlay         { get { return enemyRocketClonesInPlayCount > 1; } }
-  
-  int   playerRocketClonesInPlayCount   { get { return Resources.FindObjectsOfTypeAll<PlayerRocket>().Length; } }
-  bool  playerRocketClonesInPlay        { get { return playerRocketClonesInPlayCount > 1; } }
-
-  public static Enemy  enemy;
-  public static Player player;
-
-  protected     float  mTimer;
-  protected     bool   mWinBonusApplied;
-
-  public        City     city1;
-  public        City     city2;
-  public        City     city3;
-  public        City     city4;
-  public        Launcher launcherL;
-  public        Launcher launcherC;
-  public        Launcher launcherR;
-
-  public        Text   textScore;
-  public        Text   textPlayerMissiles;
-
-  public        Button btnPause;
-  public        Button btnResume;
-  public        Button btnQuitPauseMenu;
-  public        Button btnQuitWinMenu;
-  public        Button btnContinue;
-  public        int    mainGameOverSceneIndex;
-  public        int    mainMenuSceneIndex;
+  /** Properties. */
+  protected GameObject mCanvasGame;
+  protected GameObject mCanvasPause;
+  protected GameObject mCanvasWaveCleared;
+  protected Vector3    mCamOriginalPosition;
+  protected float      mTimer;
+  protected float      mTransitionTimer = 1.5f;
+  protected bool       mWinBonusApplied;
 
   protected static long  mCurrentWave;
   protected static float mShakeCounter;
 
-  public void incrementTimer() { mTimer += Time.deltaTime; }
+  public City     city1;
+  public City     city2;
+  public City     city3;
+  public City     city4;
+  public Launcher launcherL;
+  public Launcher launcherC;
+  public Launcher launcherR;
+  public Text     textScore;
+  public Text     textPlayerMissiles;
+  public Button   btnPause;
+  public Button   btnResume;
+  public Button   btnQuitPauseMenu;
+  public Button   btnQuitWinMenu;
+  public Button   btnContinue;
+  public int      mainGameOverSceneIndex;
+  public int      mainMenuSceneIndex;
 
+  public static Enemy  enemy;
+  public static Player player;
+
+  /** Accessors. */
+  protected int  enemyBlueBomberClonesInPlayCount{ get { return Resources.FindObjectsOfTypeAll<BlueBomber>().Length; } }
+  protected bool enemyBlueBombersClonesInPlay    { get { return enemyBlueBomberClonesInPlayCount > 1; } }
+  protected int  enemyBombClonesInPlayCount      { get { return Resources.FindObjectsOfTypeAll<Bomb>().Length; } }
+  protected bool enemyBombClonesInPlay           { get { return enemyBombClonesInPlayCount > 1; } }
+  protected int  enemyMIRVClonesInPlayCount      { get { return Resources.FindObjectsOfTypeAll<MIRV>().Length; } }
+  protected bool enemyMIRVClonesInPlay           { get { return enemyMIRVClonesInPlayCount > 1; } }
+  protected int  enemyRocketClonesInPlayCount    { get { return Resources.FindObjectsOfTypeAll<EnemyRocket>().Length; } }
+  protected bool enemyRocketClonesInPlay         { get { return enemyRocketClonesInPlayCount > 1; } }
+  protected int  playerRocketClonesInPlayCount   { get { return Resources.FindObjectsOfTypeAll<PlayerRocket>().Length; } }
+  protected bool playerRocketClonesInPlay        { get { return playerRocketClonesInPlayCount > 1; } }
+  
   public static int    buildingFiresLayer  { get { return 15; } }
   public static string buildingFireTag     { get { return "BuildingFire";  } }
   public static long   currentWave         { get { return mCurrentWave; } }
@@ -87,17 +79,25 @@ public class MainGame : MonoBehaviour
   public static string enemyExplosionTag   { get { return "EnemyExplosion";  } }
   public static int    playerExplosionLayer{ get { return 13; } }
   public static string playerExplosionTag  { get { return "PlayerExplosion";  } }
-  public static void   incrementShakeCounter(float val) { mShakeCounter += val; }
-  public static void   decrementShakeCounter()
+
+  /** Simple methods. */
+  public void incrementTimer() { mTimer += Time.deltaTime; }
+  
+  public static void incrementCurrentWave()           { mCurrentWave++; }
+  public static void incrementPlayerScore(long val)   { player.playerScore += val; }
+  public static void incrementShakeCounter(float val) { mShakeCounter += val; }
+  public static void decrementShakeCounter()
     {
     mShakeCounter -= Time.deltaTime;
     mShakeCounter = mShakeCounter < 0.0f ? 0.0f : mShakeCounter;
     }
   
-  public static void incrementCurrentWave() { mCurrentWave++; }
-
   /****************************************************************************
   * Unity Methods 
+  ****************************************************************************/
+  /****************************************************************************
+  * Start */ 
+  /**
   ****************************************************************************/
   void Start ()
     {
@@ -111,24 +111,31 @@ public class MainGame : MonoBehaviour
     btnContinue     .onClick.AddListener(handleNextWave);
 
     /** Store canvas object for later since finding inactive objects is a pain. */
-    canvasPause       = GameObject.Find("canvasPause")      .gameObject;
-    canvasGame        = GameObject.Find("canvasGame")       .gameObject;
-    canvasWaveCleared = GameObject.Find("canvasWaveCleared").gameObject;
-    enemy             = ScriptableObject.FindObjectOfType<Enemy>();
-    player            = ScriptableObject.FindObjectOfType<Player>();
+    mCanvasPause       = GameObject.Find("canvasPause")      .gameObject;
+    mCanvasGame        = GameObject.Find("canvasGame")       .gameObject;
+    mCanvasWaveCleared = GameObject.Find("canvasWaveCleared").gameObject;
+
+    /** Store Enemy and Player objects. */
+    enemy  = ScriptableObject.FindObjectOfType<Enemy>();
+    player = ScriptableObject.FindObjectOfType<Player>();
 
     /** Hide the Pause menu. */
-    canvasPause.SetActive(false);
+    mCanvasPause.SetActive(false);
 
     /** Hide win menu. */
-    canvasWaveCleared.SetActive(false);
+    mCanvasWaveCleared.SetActive(false);
 
     /** Play area visible. */
-    canvasGame.SetActive(true);
+    mCanvasGame.SetActive(true);
 
-    camOriginalPosition = Camera.main.transform.localPosition;
+    /** Save camera's original position for resetting after a shake. */
+    mCamOriginalPosition = Camera.main.transform.localPosition;
     }
 
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   void Update()
     {
     update();
@@ -173,19 +180,20 @@ public class MainGame : MonoBehaviour
   public void handleNextWave()
     {
     /** Hide the win screen. */
-    canvasWaveCleared.SetActive(false);
+    mCanvasWaveCleared.SetActive(false);
 
     /** Hide the Pause UI. */
-    canvasPause.SetActive(false);
+    mCanvasPause.SetActive(false);
 
     /** Show all UI components used for the main game. */
-    canvasGame.SetActive(true);
+    mCanvasGame.SetActive(true);
 
     /** Activate rocket controllers. */
     enemy.enabled  = true;
     player.enabled = true;
 
     incrementCurrentWave();
+
     enemy .setRocketCount((long)(currentWave * 1.0f) + 10);
     player.setRocketCount((long)(currentWave * 0.75f) + 30);
     }
@@ -198,13 +206,13 @@ public class MainGame : MonoBehaviour
   public void handlePause()
     {
     /** Hide the win screen. Not needed but doing it anyway. */
-    canvasWaveCleared.SetActive(false);
+    mCanvasWaveCleared.SetActive(false);
 
     /** Hide all UI components used for the main game. */
-    canvasGame.SetActive(false);
+    mCanvasGame.SetActive(false);
 
     /** Load in the Pause UI. */
-    canvasPause.SetActive(true);
+    mCanvasPause.SetActive(true);
 
     /** Deactivate rocket controllers. */
     enemy.enabled  = false;
@@ -219,13 +227,13 @@ public class MainGame : MonoBehaviour
   public void handleResume()
     {
     /** Hide the win screen. */
-    canvasWaveCleared.SetActive(false);
+    mCanvasWaveCleared.SetActive(false);
 
     /** Hide the Pause UI. */
-    canvasPause.SetActive(false);
+    mCanvasPause.SetActive(false);
 
     /** Show all UI components used for the main game. */
-    canvasGame.SetActive(true);
+    mCanvasGame.SetActive(true);
 
     /** Activate rocket controllers. */
     enemy.enabled  = true;
@@ -249,8 +257,8 @@ public class MainGame : MonoBehaviour
       }
     
     /** Reset camera after shaking. */
-    else if (Camera.main.transform.localPosition != camOriginalPosition)
-      Camera.main.transform.localPosition = camOriginalPosition;
+    else if (Camera.main.transform.localPosition != mCamOriginalPosition)
+      Camera.main.transform.localPosition = mCamOriginalPosition;
     }
 
   /****************************************************************************
@@ -264,13 +272,13 @@ public class MainGame : MonoBehaviour
     mTimer = 0;
 
     /** Show the win screen. */
-    canvasWaveCleared.SetActive(true);
+    mCanvasWaveCleared.SetActive(true);
 
     /** Load in the Pause UI. */
-    canvasPause.SetActive(false);
+    mCanvasPause.SetActive(false);
 
     /** Hide all UI components used for the main game. */
-    canvasGame.SetActive(false);
+    mCanvasGame.SetActive(false);
 
     /** Activate rocket controllers. */
     enemy.enabled  = false;
@@ -282,7 +290,7 @@ public class MainGame : MonoBehaviour
 
     if(!mWinBonusApplied)
       {
-      player.playerScore = player.playerScore + launcherBonus + cityBonus + missileBonus;
+      incrementPlayerScore(launcherBonus + cityBonus + missileBonus);
       mWinBonusApplied = true;
       }
 
@@ -291,9 +299,21 @@ public class MainGame : MonoBehaviour
     GameObject.Find("txtCurrentScore") .GetComponent<Text>().text = "SCORE\n" + player.playerScore;
     GameObject.Find("txtLauncherCount").GetComponent<Text>().text = player.launcherCount().ToString()    + " x 500 = " + launcherBonus.ToString();
     GameObject.Find("txtCityCount")    .GetComponent<Text>().text = player.cityCount().ToString()        + " x 250 = " + cityBonus.ToString();
-    GameObject.Find("txtAmmoCount")    .GetComponent<Text>().text = player.currentRocketCount.ToString() + " x 20 = " + missileBonus.ToString();
+    GameObject.Find("txtAmmoCount")    .GetComponent<Text>().text = player.currentRocketCount.ToString() + " x 20 = "  + missileBonus.ToString();
     }
 
+  /****************************************************************************
+  * keyBoardCommands */ 
+  /**
+  * Keyboard commands for testing the game.
+  ****************************************************************************/
+  protected void checkKeyBoardCommand()
+    {
+    /** Mouse position. */
+    if (Input.GetKeyDown(KeyCode.M))
+      print("Mouse ScreenToWorldPoint: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+    }
+    
   /****************************************************************************
   * loadGameOverMenu */ 
   /**
@@ -321,35 +341,20 @@ public class MainGame : MonoBehaviour
   ****************************************************************************/
   public void update()
     {
-
     /** Check to see if we should shake the camera. */
     handleShake();
 
     textScore.text          = "Score\n"       + player.playerScore;
     textPlayerMissiles.text = "Player Ammo\n" + player.currentRocketCount;
 
-    /** Mouse position. */
-    if (Input.GetKeyDown(KeyCode.M))
-      print("Mouse ScreenToWorldPoint: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-//    /** Pause. */
-//    if (Input.GetKey(KeyCode.S))
-//      {
-//      handlePause();
-//      }
-
-//    /** Resume. */
-//    if (Input.GetKeyDown(KeyCode.W))
-//      {
-//      handleResume();
-//      }  
+    checkKeyBoardCommand();
 
     /** Win. */
     if(checkWin())
       {
       /** Using a delay so the transition does not seem as abrupt. */
       incrementTimer();
-      if(mTimer >= transitionTimer)
+      if(mTimer >= mTransitionTimer)
         handleWin();
       }
 
@@ -360,7 +365,7 @@ public class MainGame : MonoBehaviour
         {
         /** Using a delay so the transition does not seem as abrupt. */
         incrementTimer();
-        if(mTimer >= transitionTimer)
+        if(mTimer >= mTransitionTimer)
           loadGameOverMenu();
         }
       }

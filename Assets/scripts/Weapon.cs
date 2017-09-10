@@ -37,11 +37,19 @@ public abstract class Weapon : Thing
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
-  virtual public void Start()
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
+  public virtual void Start()
     {
     }
 
-  virtual public void Update()
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
+  public virtual void Update()
     {
     }
 
@@ -53,17 +61,17 @@ public abstract class Weapon : Thing
   /**
   * Checks if the animation is finished, "Done" state.
   ****************************************************************************/
-  virtual public bool checkAnimDone()
+  public virtual bool checkAnimDone()
     {
     bool t = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Done");
     return t;
     }
 
-  virtual public void move()
+  public virtual void move()
     {
     }
   
-  virtual public void playExplosionAnim()
+  public virtual void playExplosionAnim()
     {
     }
   
@@ -90,7 +98,8 @@ public abstract class Weapon : Thing
     int maxIndex    = buildings.Count;
     int minIndex    = 0;
     int targetIndex = Random.Range(minIndex, maxIndex);
-    Vector3 target = new Vector3(buildings[targetIndex].transform.position.x, targetY, z);
+    //Vector3 target = new Vector3(buildings[targetIndex].transform.position.x, targetY, z);
+    Vector3 target = new Vector3(buildings[2].transform.position.x, targetY, z);
 
     return target;//buildings[targetIndex].transform.position;
     }
@@ -100,7 +109,7 @@ public abstract class Weapon : Thing
   /**
   * Checks if the animation is finished, "Done" state, and destroys the object.
   ****************************************************************************/
-  virtual public void tryDestroy()
+  public virtual void tryDestroy()
     {
     if (checkAnimDone())
       Destroy (gameObject);

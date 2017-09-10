@@ -8,14 +8,19 @@ using System.Collections;
 ******************************************************************************/
 public class PlayerRocket : Rocket
   {
-  protected Vector3 mMouse;
+  /** Final position of the rocket. */ protected Vector3 mFinalPosition;
+  /** Mouse position. */               protected Vector3 mMouse;
 
-  Vector3 finalPosition;
+  /** Score multiplier text. */ public GameObject multiplierText;
 
   /****************************************************************************
   * Unity Method
   ****************************************************************************/
-  override public void Start()
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
+  public override void Start()
     {
     base.Start();
 
@@ -33,7 +38,11 @@ public class PlayerRocket : Rocket
     GetComponent<Rigidbody2D>().freezeRotation = true;
     playRocketLaunchSound();
     }
-  
+
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   public override void Update ()
     {
     base.Update();
@@ -41,13 +50,16 @@ public class PlayerRocket : Rocket
     tryDestroy();
     }
  
+  /****************************************************************************
+  * OnCollisionEnter2D */ 
+  /**
+  ****************************************************************************/
   void OnCollisionEnter2D(Collision2D coll)
     {
     if (!dead)
       {
       playExplosionAnim();
       }
-    print("Player rocket colliding");
     }
 
   /****************************************************************************
@@ -77,11 +89,11 @@ public class PlayerRocket : Rocket
     }
 
   /****************************************************************************
-  * override playExplosionAnim */ 
+  * playExplosionAnim */ 
   /**
   * Plays the Explosion Animation. Sets the layer to the PlayerExplosion layer.
   ****************************************************************************/
-  override public void playExplosionAnim()
+  public override void playExplosionAnim()
     {
     base.playExplosionAnim();
 

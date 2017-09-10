@@ -26,7 +26,11 @@ public abstract class Rocket : Weapon
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
-  override public void Start()
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
+  public override void Start()
     {
     setWeaponSpeed(10.0f);
     dead = false;
@@ -34,13 +38,13 @@ public abstract class Rocket : Weapon
     mRocketLaunches   = new AudioClip[] {rocketLaunch1,    rocketLaunch2,    rocketLaunch3};
     }
 
-  override public void Update()
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
+  public override void Update()
     {
     base.Update();
-    if (Input.GetKeyDown(KeyCode.A))
-      {
-      playExplosionAnim();
-      }
     }
 
   /****************************************************************************
@@ -75,6 +79,7 @@ public abstract class Rocket : Weapon
   /****************************************************************************
   * playRocketExplosionSound */ 
   /**
+  * Plays the explosion sound of the Rocket.
   ****************************************************************************/
   public void playRocketExplosionSound()
     {
@@ -90,6 +95,7 @@ public abstract class Rocket : Weapon
   /****************************************************************************
   * playRocketLaunchSound */ 
   /**
+  * Plays the launch sound of the Rocket.
   ****************************************************************************/
   public void playRocketLaunchSound()
     {
@@ -121,7 +127,7 @@ public abstract class Rocket : Weapon
   /**
   * Checks if the animation is finished, "Done" state, and destroys the object.
   ****************************************************************************/
-  override public void tryDestroy()
+  public override void tryDestroy()
     {
     base.tryDestroy();
     }

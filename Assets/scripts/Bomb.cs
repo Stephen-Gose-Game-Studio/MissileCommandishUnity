@@ -13,12 +13,20 @@ public class Bomb : Weapon
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
   public override void Start ()
     {
 
     setWeaponSpeed((float)Random.Range(6, 10));
 	  }
 	
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   public override void Update ()
     {
     base.Update();
@@ -26,6 +34,10 @@ public class Bomb : Weapon
     tryDestroy();
 	  }
 
+  /****************************************************************************
+  * OnCollisionEnter2D */ 
+  /**
+  ****************************************************************************/
   void OnCollisionEnter2D(Collision2D coll)
     {
     /** Increase playerScore. */
@@ -33,11 +45,11 @@ public class Bomb : Weapon
       {
       /** Increase player score when hit by player's Rocket. **/
       if (coll.gameObject.tag == "PlayerRocket")
-        MainGame.player.playerScore += directHitValue;
+        MainGame.incrementPlayerScore(directHitValue);
 
       /** Increase player score when hit by player's Explosion. **/
       else if (coll.gameObject.tag == "PlayerExplosion")
-        MainGame.player.playerScore += proximityHitValue;
+        MainGame.incrementPlayerScore(proximityHitValue);
 
       /** Hit the ground. */
       else if (coll.gameObject.tag == "Ground")
@@ -47,12 +59,16 @@ public class Bomb : Weapon
       }
     }
 
+  /****************************************************************************
+  * OnParticleCollision */ 
+  /**
+  ****************************************************************************/
   void OnParticleCollision(GameObject other)
     {
     /** Increase player score when hit by player's Explosion. **/
     if (!dead)
       {
-      MainGame.player.playerScore -= particleHitValue;
+      MainGame.incrementPlayerScore(particleHitValue);
       playExplosionAnim();
       }
     }
@@ -81,12 +97,12 @@ public class Bomb : Weapon
     }
   
   /****************************************************************************
-  * override playExplosionAnim */ 
+  * playExplosionAnim */ 
   /**
   * Plays the Explosion Animation. Sets the layer to the EnemyExplosion layer.
   * and Tag.
   ****************************************************************************/
-  override public void playExplosionAnim()
+  public override void playExplosionAnim()
     {
     dead = true;
 
@@ -116,7 +132,7 @@ public class Bomb : Weapon
   /**
   * Checks if the animation is finished, "Done" state, and destroys the object.
   ****************************************************************************/
-  override public void tryDestroy()
+  public override void tryDestroy()
     {
     if (dead)
       {

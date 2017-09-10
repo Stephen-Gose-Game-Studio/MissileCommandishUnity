@@ -19,6 +19,10 @@ public class BlueBomber : Weapon
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
   public override void Start()
     {
     setWeaponSpeed((float)Random.Range(6, 10));
@@ -35,6 +39,10 @@ public class BlueBomber : Weapon
     mBombCount  = 1;
     }
 
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   public override void Update()
     {
     base.Update();
@@ -44,6 +52,10 @@ public class BlueBomber : Weapon
     tryDestroy();
     }
 	
+  /****************************************************************************
+  * OnCollisionEnter2D */ 
+  /**
+  ****************************************************************************/
   void OnCollisionEnter2D(Collision2D coll)
     {
     /** Increase playerScore. */
@@ -51,22 +63,26 @@ public class BlueBomber : Weapon
       {
       /** Increase player score when hit by player's Rocket. **/
       if (coll.gameObject.tag == "PlayerRocket")
-        MainGame.player.playerScore += directHitValue;
+        MainGame.incrementPlayerScore(directHitValue);
 
       /** Increase player score when hit by player's Explosion. **/
       else if (coll.gameObject.tag == "PlayerExplosion")
-        MainGame.player.playerScore += proximityHitValue;
+        MainGame.incrementPlayerScore(proximityHitValue);
       
       playExplosionAnim();
       }
     }
 
+  /****************************************************************************
+  * OnParticleCollision */ 
+  /**
+  ****************************************************************************/
   void OnParticleCollision(GameObject other)
     {
     /** Increase player score when hit by player's Explosion. **/
     if (!dead)
       {
-      MainGame.player.playerScore += particleHitValue;
+      MainGame.incrementPlayerScore(particleHitValue);
 
       playExplosionAnim();
       }

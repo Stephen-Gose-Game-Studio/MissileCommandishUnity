@@ -13,6 +13,13 @@ public class MIRV : Rocket
   public AudioClip  split;
   bool launchedWarheads;
 
+  /****************************************************************************
+  * Unity Methods *
+  ****************************************************************************/
+  /****************************************************************************
+  * Start */ 
+  /**
+  ****************************************************************************/
 	public override void Start ()
     {
     base.Start();
@@ -20,6 +27,10 @@ public class MIRV : Rocket
     launchedWarheads = false;
 	  }
 	
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
   public override void Update ()
     {
     base.Update();
@@ -28,6 +39,10 @@ public class MIRV : Rocket
     tryDestroy();
 	  }
 
+  /****************************************************************************
+  * OnCollisionEnter2D */ 
+  /**
+  ****************************************************************************/
   void OnCollisionEnter2D(Collision2D coll)
     {
     /** Increase playerScore. */
@@ -35,11 +50,11 @@ public class MIRV : Rocket
       {
       /** Increase player score when hit by player's Rocket. **/
       if (coll.gameObject.tag == "PlayerRocket")
-        MainGame.player.playerScore += directHitValue;
+        MainGame.incrementPlayerScore(directHitValue);
 
       /** Increase player score when hit by player's Explosion. **/
       else if (coll.gameObject.tag == "PlayerExplosion")
-        MainGame.player.playerScore += proximityHitValue;
+        MainGame.incrementPlayerScore(proximityHitValue);
 
       /** Hit the ground. */
       else if (coll.gameObject.tag == "Ground")
@@ -48,14 +63,18 @@ public class MIRV : Rocket
       playExplosionAnim();
       }
     }
-
+  
+  /****************************************************************************
+  * OnParticleCollision */ 
+  /**
+  ****************************************************************************/
   void OnParticleCollision(GameObject other)
     {
     /** Increase player score when hit by player's Explosion. **/
     if (!dead)
       {
       launchedWarheads = true;
-      MainGame.player.playerScore += particleHitValue;
+      MainGame.incrementPlayerScore(particleHitValue);
       playExplosionAnim();
       }
     }
@@ -143,7 +162,7 @@ public class MIRV : Rocket
     }
 
   /****************************************************************************
-  * override playExplosionAnim */ 
+  * playExplosionAnim */ 
   /**
   * Plays the Explosion Animation. Sets the layer to the EnemyExplosion layer.
   * and Tag.
