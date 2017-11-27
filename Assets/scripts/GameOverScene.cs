@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 * Scene consisting of a basic background and some text denoting player lost.
 * Allows for restarting the game.
 ******************************************************************************/
-public class GameOverScene : Thing
+public class GameOverScene : BaseManager
   {
   public Button btnRestart;
   public int    mainGameSceneIndex = -1;
@@ -24,7 +24,15 @@ public class GameOverScene : Thing
   void Start ()
     {
     btnRestart.GetComponent<Button>().onClick.AddListener(loadMainGameScene);
-    PlayerPrefs.SetInt("previousSceneIndex", 2);
+    }
+  
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
+  public override void Update()
+    {
+    base.Update();
     }
 
   /****************************************************************************

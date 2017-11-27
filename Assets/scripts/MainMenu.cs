@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 * Scene consisting of a basic background, title text, credit text, and a
 * button allowing for the player to start a new game.
 ******************************************************************************/
-public class MainMenu : MonoBehaviour
+public class MainMenu : BaseManager
   {
   public Button newGameButton;
   public int    mainGameSceneIndex;
@@ -25,6 +25,15 @@ public class MainMenu : MonoBehaviour
     {
     newGameButton.GetComponent<Button>().onClick.AddListener(loadMainGameScene);
     PlayerPrefs.SetInt("previousSceneIndex", 0);
+    }
+
+  /****************************************************************************
+  * Update */ 
+  /**
+  ****************************************************************************/
+  public override void Update()
+    {
+    base.Update();
     }
   
   /****************************************************************************

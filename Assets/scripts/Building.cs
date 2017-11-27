@@ -6,7 +6,7 @@ using System.Collections;
 /**
 * Base class for Cities and Launchers.
 ****************************************************************************/
-public class Building : Thing
+public class Building : MonoBehaviour
   {
   public bool   dead;
   public string bldgName;

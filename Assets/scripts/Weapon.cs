@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /** 
 * Base class for all weapons such as Rockets and Bombs.
 ******************************************************************************/
-public abstract class Weapon : Thing
+public abstract class Weapon : MonoBehaviour
   {
   protected float   mAngle;
   protected Vector3 mScreenPoint;

@@ -26,7 +26,7 @@ TODOs
 /** 
 * Where the magic happens.
 ******************************************************************************/
-public class MainGame : MonoBehaviour
+public class MainGame : BaseManager
   {
   /** Properties. */
   protected GameObject mCanvasGame;
@@ -136,8 +136,9 @@ public class MainGame : MonoBehaviour
   * Update */ 
   /**
   ****************************************************************************/
-  void Update()
+  public override void Update()
     {
+    base.Update();
     update();
     }
   

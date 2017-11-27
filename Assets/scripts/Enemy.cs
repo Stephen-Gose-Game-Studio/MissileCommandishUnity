@@ -7,7 +7,7 @@ using System.Collections;
 /** 
 * Responsible for generating an maintaining all weapons that oppose the player.
 ******************************************************************************/
-public class Enemy : Thing
+public class Enemy : MonoBehaviour
   {
 
   /** Object for enemy missile. */                   public    GameObject enemyRocket;
