@@ -1,7 +1,7 @@
 
 *.pdb
 Library/
-ProjectSettings/
+
 obj/
 *.sln
 
