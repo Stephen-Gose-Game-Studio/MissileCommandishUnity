@@ -98,8 +98,7 @@ public abstract class Weapon : Thing
     int maxIndex    = buildings.Count;
     int minIndex    = 0;
     int targetIndex = Random.Range(minIndex, maxIndex);
-    //Vector3 target = new Vector3(buildings[targetIndex].transform.position.x, targetY, z);
-    Vector3 target = new Vector3(buildings[2].transform.position.x, targetY, z);
+    Vector3 target = new Vector3(buildings[targetIndex].transform.position.x, targetY, z);
 
     return target;//buildings[targetIndex].transform.position;
     }
