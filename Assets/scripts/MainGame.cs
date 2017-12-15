@@ -3,30 +3,13 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-/**
-TODOs 
-[]After certain score met, add building back.
-[]Ad support.
-[]Change scenery as game progresses.
-[]Score multipliers.
-[]Show score on game over.
-[]Clouds.
-[]Config file?
-**/
-/****************************************************************************
-* DEV NOTES
-*   Animators: The way I handle animations is probably odd from the way they
-* should be handled. To make it work my I have 3+ states that are manually
-* made: Idle, SomeExplosion, ..., Done. 'Idle' is set to have no exit times
-* so its transition will be ignored(hack?). 'Done' is checked for in order
-* to discern that the object should be destroyed.
-****************************************************************************/
+
 /******************************************************************************
 * MainGame */
 /** 
 * Where the magic happens.
 ******************************************************************************/
-public class MainGame : BaseManager
+public class MainGame : MonoBehaviour
   {
   /** Properties. */
   protected GameObject mCanvasGame;
@@ -49,11 +32,6 @@ public class MainGame : BaseManager
   public Launcher launcherR;
   public Text     textScore;
   public Text     textPlayerMissiles;
-  public Button   btnPause;
-  public Button   btnResume;
-  public Button   btnQuitPauseMenu;
-  public Button   btnQuitWinMenu;
-  public Button   btnContinue;
   public int      mainGameOverSceneIndex;
   public int      mainMenuSceneIndex;
 
@@ -99,16 +77,10 @@ public class MainGame : BaseManager
   * Start */ 
   /**
   ****************************************************************************/
-  void Start ()
+  public void Start ()
     {
     mShakeCounter = 0.0f;
     mCurrentWave  = 1;
-    /** Add listeners for buttons. */
-    btnPause        .onClick.AddListener(handlePause);
-    btnResume       .onClick.AddListener(handleResume);
-    btnQuitPauseMenu.onClick.AddListener(loadMainMenu);
-    btnQuitWinMenu  .onClick.AddListener(loadMainMenu);
-    btnContinue     .onClick.AddListener(handleNextWave);
 
     /** Store canvas object for later since finding inactive objects is a pain. */
     mCanvasPause       = GameObject.Find("canvasPause")      .gameObject;
@@ -136,10 +108,42 @@ public class MainGame : BaseManager
   * Update */ 
   /**
   ****************************************************************************/
-  public override void Update()
+  public void Update()
     {
-    base.Update();
-    update();
+
+    /** Check to see if we should shake the camera. */
+    handleShake();
+
+    textScore.text          = "Score\n"       + player.playerScore;
+    textPlayerMissiles.text = "Player Ammo\n" + player.currentRocketCount;
+
+    /** Win. */
+    if(checkWin())
+      {
+      /** Using a delay so the transition does not seem as abrupt. */
+      incrementTimer();
+      if(mTimer >= mTransitionTimer)
+        handleWin();
+      }
+
+    /** Check that Player lost. */
+    else if(checkLose())
+      {
+      if(!enemyRocketClonesInPlay)
+        {
+        /** Using a delay so the transition does not seem as abrupt. */
+        incrementTimer();
+        if(mTimer >= mTransitionTimer)
+          loadGameOverMenu();
+        }
+      }
+
+    /** Do other things. */
+    else
+      {
+      /** Reset the win bonus between win screens. */
+      mWinBonusApplied = false;
+      }
     }
   
   /****************************************************************************
@@ -148,7 +152,7 @@ public class MainGame : BaseManager
   /****************************************************************************
   * checkLose */
   /**
-  * Checks to see if the player lost.
+  * Player loses if they have no buildings or launchers.
   ****************************************************************************/
   public bool checkLose()
     {
@@ -322,7 +326,7 @@ public class MainGame : BaseManager
   ****************************************************************************/
   public void loadGameOverMenu()
     {
-    SceneManager.LoadScene(mainGameOverSceneIndex);
+    SceneManager.LoadScene("GameOverScene");
     }
 
   /****************************************************************************
@@ -332,50 +336,6 @@ public class MainGame : BaseManager
   ****************************************************************************/
   public void loadMainMenu()
     {
-    SceneManager.LoadScene(mainMenuSceneIndex);
-    }
-
-  /****************************************************************************
-  * update */ 
-  /**
-  * Where the magic happens.
-  ****************************************************************************/
-  public void update()
-    {
-    /** Check to see if we should shake the camera. */
-    handleShake();
-
-    textScore.text          = "Score\n"       + player.playerScore;
-    textPlayerMissiles.text = "Player Ammo\n" + player.currentRocketCount;
-
-    checkKeyBoardCommand();
-
-    /** Win. */
-    if(checkWin())
-      {
-      /** Using a delay so the transition does not seem as abrupt. */
-      incrementTimer();
-      if(mTimer >= mTransitionTimer)
-        handleWin();
-      }
-
-    /** Check that Player lost. */
-    else if(checkLose())
-      {
-      if(!enemyRocketClonesInPlay)
-        {
-        /** Using a delay so the transition does not seem as abrupt. */
-        incrementTimer();
-        if(mTimer >= mTransitionTimer)
-          loadGameOverMenu();
-        }
-      }
-    
-    /** Do other things. */
-    else
-      {
-      /** Reset the win bonus between win screens. */
-      mWinBonusApplied = false;
-      }
+    SceneManager.LoadScene("MainMenuScene");
     }
   }

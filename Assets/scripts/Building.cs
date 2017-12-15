@@ -36,23 +36,12 @@ public class Building : MonoBehaviour
       *   or continue screen, so we want to be sure it resumes. */
       if (!this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Burning"))
         this.GetComponent<Animator>().Play("Burning");
-      //tryDestroy();
       }
     }
 
   /****************************************************************************
   * Methods 
   ****************************************************************************/
-  /****************************************************************************
-  * checkAnimDone */ 
-  /**
-  * Checks if the animation is finished, "Done" state.
-  ****************************************************************************/
-  public bool checkAnimDone()
-    {
-    return false;//this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Done");
-    }
-
   /****************************************************************************
   * playExplosionAnim */ 
   /**
@@ -70,16 +59,5 @@ public class Building : MonoBehaviour
       gameObject.tag   = MainGame.buildingFireTag;
       }
     }
-
-  /****************************************************************************
-  * tryDestroy */ 
-  /**
-  * Checks if the animation is finished, "Done" state, and destroys the object.
-  ****************************************************************************/
-  public void tryDestroy()
-    {
-//    if (checkAnimDone ())
-    Destroy (gameObject);
-    } 
   }
 

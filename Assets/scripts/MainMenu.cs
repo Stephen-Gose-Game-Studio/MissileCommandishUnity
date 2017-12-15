@@ -2,17 +2,19 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 /******************************************************************************
 * MainMenu */
 /** 
-* Scene consisting of a basic background, title text, credit text, and a
-* button allowing for the player to start a new game.
+* Manages events in the MainMenuScene.
 ******************************************************************************/
-public class MainMenu : BaseManager
+public class MainMenu : MonoBehaviour
   {
-  public Button newGameButton;
-  public int    mainGameSceneIndex;
+  public AudioMixer mainMixer;
+
+  protected GameObject mCanvasMainMenu;
+  protected GameObject mCanvasOptions;
 
   /****************************************************************************
   * Unity Methods 
@@ -21,35 +23,59 @@ public class MainMenu : BaseManager
   * Start */ 
   /**
   ****************************************************************************/
-  void Start ()
+  public void Start()
     {
-    newGameButton.GetComponent<Button>().onClick.AddListener(loadMainGameScene);
-    PlayerPrefs.SetInt("previousSceneIndex", 0);
+    /** Store canvas object for later since finding inactive objects is a pain. */
+    mCanvasMainMenu = GameObject.Find("canvasMainMenu").gameObject;
+    mCanvasOptions  = GameObject.Find("canvasOptions") .gameObject;
+
+    mCanvasMainMenu.SetActive(true);
+    mCanvasOptions.SetActive(false);
     }
 
-  /****************************************************************************
-  * Update */ 
-  /**
-  ****************************************************************************/
-  public override void Update()
-    {
-    base.Update();
-    }
-  
   /****************************************************************************
   * Methods 
   ****************************************************************************/
   /****************************************************************************
+  * handleBack */ 
+  /**
+  * Displays the Main Menu canvas.
+  ****************************************************************************/
+  public void handleBack()
+    {
+    mCanvasMainMenu.SetActive(true);
+    mCanvasOptions.SetActive(false);
+    }
+
+  /****************************************************************************
+  * handleOptions */ 
+  /**
+  * Displays the Options canvas.
+  ****************************************************************************/
+  public void handleOptions()
+    {
+    mCanvasMainMenu.SetActive(false);
+    mCanvasOptions.SetActive(true);
+    }
+
+  /****************************************************************************
   * loadMainGame */ 
   /**
-  * UnityEvent that is triggered when the button is pressed. Loads the Main
-  * Game Scene.
-  * 
-  * Note: Triggered on MouseUp after MouseDown on the same object.
-  * see: https://docs.unity3d.com/ScriptReference/UI.Button-onClick.html
+  * Loads the main game.
   ****************************************************************************/
-  void loadMainGameScene()
+  public void loadMainGameScene()
     {
-    SceneManager.LoadScene(mainGameSceneIndex);
+    SceneManager.LoadScene("MainGameScene");
+    }
+
+  /****************************************************************************
+  * setVolume */ 
+  /**
+  * Sets the game's volume.
+  * @param  volume  Value to set mixer volume.
+  ****************************************************************************/
+  public void setVolume(float volume)
+    {
+    mainMixer.SetFloat("volume", volume);
     }
   }
