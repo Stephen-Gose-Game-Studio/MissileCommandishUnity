@@ -15,7 +15,7 @@ public class BlueBomber : Weapon
 
   protected Vector3 mBombTarget;
   protected int     mBombCount;
-  //TODO CH  BOMB DROP Y IS FUCKED UP.
+
   /****************************************************************************
   * Unity Methods 
   ****************************************************************************/
